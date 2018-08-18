@@ -34,3 +34,7 @@ class MusicController():
 			self.mixer_context.load(new_song)
 			self.mixer_context.play()
 			self.has_music_loaded = True
+			
+	def quit():
+		print("Powering off...")
+		self.mixer_context.stop()

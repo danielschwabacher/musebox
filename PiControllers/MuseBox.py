@@ -24,6 +24,7 @@ class MuseBox():
 	
 	def toggle_power(self):
 		self.power = not self.power
+		exit(1)
 	
 	def process_loop(self):
 		while (self.power):
