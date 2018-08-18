@@ -38,6 +38,8 @@ String serial_code = "";
 
 int CODE_CONTEXT = -1;
 
+int power = 1;
+
 void setup(){
   Serial.begin(28800); 
   pinMode(STANDBY_LED, OUTPUT);
@@ -74,23 +76,35 @@ void update_code(){
    return;
 }
 
+void enable_processing_lights(){
+    digitalWrite(STANDBY_LED, LOW);
+    digitalWrite(PROCESSING_LED, HIGH);
+    digitalWrite(PLAYING_LED, LOW);
+    digitalWrite(STOPPED_LED, LOW);
+}
 
 void loop(){  
-  // digitalWrite(STANDBY_LED, LOW);
+  digitalWrite(STANDBY_LED, HIGH);
   if (irrecv.decode(&ir_results)){
     Serial.write(ir_results.value);
   }
   if (Serial.available() > 0){
+    enable_processing_lights();
+    digitalWrite(PROCESSING_LED, HIGH);
     update_code();
     switch (CODE_CONTEXT){
       case 1:
         is_playing = !is_playing;
         digitalWrite(PLAYING_LED, is_playing);
+        digitalWrite(STOPPED_LED, !is_playing);
+        break;
+      case 3:
         break;
       default:
         break;    
     }
+    digitalWrite(PROCESSING_LED, LOW);
   }
   irrecv.resume();
-  delay(1000);
+  delay(2000);
 }
