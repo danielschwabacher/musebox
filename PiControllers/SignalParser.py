@@ -7,6 +7,13 @@ class SignalParser():
 	'''
 	def __init__(self, serial_obj):
 		self.serial = serial_obj
+		self.valid_codes = [b'fd', b'3d', b'5d']
+		
+	def is_valid(self, sig_code):
+		if (sig_code in self.valid_codes):
+			return True
+		return False 
+	
 	
 	def parse(self, signal_code):
 		'''
@@ -19,7 +26,7 @@ class SignalParser():
 				on the IR remote
 			'''
 			rv = 'p'
-			self.serial.write('p')
+			self.serial.write(b'p')
 			return rv
 			
 			
@@ -29,7 +36,7 @@ class SignalParser():
 				the IR remote
 			'''
 			rv = 'n'
-			self.serial.write('n')
+			self.serial.write(b'n')
 			return rv
 
 			
@@ -40,5 +47,5 @@ class SignalParser():
 				the IR remote
 			'''
 			rv = 'x'
-			self.serial.write('x')
+			self.serial.write(b'x')
 			return rv
