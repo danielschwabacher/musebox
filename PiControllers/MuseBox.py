@@ -5,7 +5,7 @@ from MusicController import MusicController
 from SignalParser import SignalParser
 from IRDecoder import IRDecoder
 
-ser=serial.Serial("/dev/ttyACM0", 28800);
+ser=serial.Serial("/dev/ttyACM0", 28800, timeout=0.05);
 time.sleep(1)
 ser.baudrate=28800;
 VERSION = "0.0.1"
@@ -27,14 +27,17 @@ class MuseBox():
 	
 	def process_loop(self):
 		while (self.power):
-			serial_line_result = ser.read(size=1)
+			serial_line_result = ser.read_until(b'70')
+			ser.flushInput()
 			sig_recv = self.decoder.decode(serial_line_result, True)
 			parse_result = self.parser.parse(sig_recv)
 			if (parse_result == 'p'):
-				self.controller.play()
+				self.controller.toggle_start_stop()
+			if (parse_result == 'n'):
+				self.controller.play_new_song()
 			elif (parse_result == 'x'):
 				self.toggle_power()
-				time.sleep(1)
+			time.sleep(2)
 				
 box1 = MuseBox()
 box1.process_loop()

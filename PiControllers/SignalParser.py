@@ -21,6 +21,19 @@ class SignalParser():
 			rv = 'p'
 			self.serial.write('p')
 			return rv
+			
+			
+		if (signal_code == b'3d'):
+			'''
+				Represents the next button on 
+				the IR remote_object_tree_item
+			'''
+			rv = 'n'
+			self.serial.write('n')
+			return rv
+
+			
+			
 		if (signal_code == b'5d'):
 			'''
 				Represents the Power button on 
