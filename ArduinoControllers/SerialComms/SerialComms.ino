@@ -90,19 +90,31 @@ void loop(){
   }
   if (Serial.available() > 0){
     enable_processing_lights();
-    digitalWrite(PROCESSING_LED, HIGH);
     update_code();
     switch (CODE_CONTEXT){
       case 1:
+        // Start/Pause
         is_playing = !is_playing;
         digitalWrite(PLAYING_LED, is_playing);
         digitalWrite(STOPPED_LED, !is_playing);
         break;
-      case 3:
+       case 2:
+        // Nothing
         break;
-      default:
-        break;    
-    }
+      case 3:
+        // Power on/off 
+        break;
+      case 4:
+        // Next song
+        if (is_playing){
+          digitalWrite(STOPPED_LED, 0);
+          digitalWrite(PLAYING_LED, 1); 
+        }
+        else{
+          digitalWrite(PLAYING_LED, 0);
+          digitalWrite(STOPPED_LED, 1);       
+        }
+  }
     digitalWrite(PROCESSING_LED, LOW);
   }
   irrecv.resume();
