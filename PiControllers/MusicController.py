@@ -9,6 +9,17 @@ class MusicController():
 		self.has_music_loaded = False
 		pygame.mixer.init()
 		
+		
+	def reset(self):
+		print("Reseting Music Controller")
+		self.mixer_context.stop()
+		self.is_playing = False
+		self.has_music_loaded = False
+		self.queue.reset_songs()
+		
+	def clear_queue(self):
+		print("Clearing queue")
+		self.queue.reset_songs()
 	def toggle_start_stop(self):
 		'''
 			Cases:

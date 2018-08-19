@@ -7,7 +7,7 @@ class SignalParser():
 	'''
 	def __init__(self, serial_obj):
 		self.serial = serial_obj
-		self.valid_codes = [b'fd', b'3d', b'5d']
+		self.valid_codes = [b'fd', b'3d', b'5d', b'4f']
 		
 	def is_valid(self, sig_code):
 		if (sig_code in self.valid_codes):
@@ -48,4 +48,13 @@ class SignalParser():
 			'''
 			rv = 'x'
 			self.serial.write(b'x')
+			return rv
+			
+		if (signal_code == b'4f'):
+			'''
+				Represnt the ST/REPT button on
+				the IR remote
+				Resets the music queue
+			'''
+			rv = 'v'
 			return rv

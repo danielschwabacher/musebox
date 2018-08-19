@@ -20,13 +20,12 @@ class MuseBox():
 		self.parser = SignalParser(ser)
 		self.music_controller = MusicController()
 		self.led_controller = LEDController()
+		self.music_controller.reset()
 	
 	def toggle_power(self):
 		self.power = not self.power
 		exit(1)
 
-
-	
 	def process_loop(self):
 		while (self.power):
 			if (ser.inWaiting()):
@@ -38,12 +37,15 @@ class MuseBox():
 					if (parse_result == 'p'):
 						self.led_controller.blink_processing_light()
 						self.music_controller.toggle_start_stop()
-					if (parse_result == 'n'):
+					elif (parse_result == 'n'):
 						self.led_controller.blink_processing_light()
 						self.music_controller.play_new_song()
 					elif (parse_result == 'x'):
 						self.led_controller.blink_processing_light()
 						self.toggle_power()
+					elif (parse_result == 'v'):
+						self.led_controller.blink_processing_light()
+						self.music_controller.clear_queue()
 				else:
 					self.led_controller.blink_error_light()
 			time.sleep(2)
