@@ -1,1 +1,5 @@
 PiControllers/*.pyc
+PiControllers/nohup.out
+ArduinoControllers/nohup.out
+nohup.out
+PiControllers/__pycache__
