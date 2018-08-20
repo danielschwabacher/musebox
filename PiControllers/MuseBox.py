@@ -36,13 +36,12 @@ class MuseBox():
 					parse_result = self.parser.parse(sig_recv)
 					if (parse_result == 'p'):
 						self.led_controller.blink_processing_light()
-						self.music_controller.toggle_start_stop()
+						self.music_controller.toggle()
 					elif (parse_result == 'n'):
 						self.led_controller.blink_processing_light()
-						self.music_controller.play_new_song()
+						self.music_controller.next_song()
 					elif (parse_result == 'x'):
 						self.led_controller.blink_processing_light()
-						self.toggle_power()
 					elif (parse_result == 'v'):
 						self.led_controller.blink_processing_light()
 						self.music_controller.clear_queue()
