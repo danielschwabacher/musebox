@@ -27,12 +27,29 @@ class MuseBox():
 		self.parser = SignalParser(ser)
 		self.music_controller = MusicController()
 		self.led_controller = LEDController()
-		self.music_controller.reset()
+		self.music_controller.initialize()
 	
 	def toggle_power(self):
+		if (self.power):
+			# turn off if power is on
+			self.music_controller.reset()
+			self.led_controller.toggle_power_off_light(0)
+		else:
+			# turn on if power is off
+			self.music_controller.initialize()
+			self.led_controller.toggle_power_off_light(1)
 		self.power = not self.power
-		exit(1)
-
+		# wait and poll forever until power is restored
+		while (not self.power):
+			if (ser.inWaiting()):
+				serial_line_result = ser.read_until(b'70')
+				ser.flushInput()
+				sig_recv = self.decoder.decode(serial_line_result, True)
+				parse_result = self.parser.parse(sig_recv)
+				if (parse_result == 'x'):
+					self.led_controller.blink_processing_light()
+					self.toggle_power()
+	
 	def process_loop(self):
 		while (self.power):
 			if (ser.inWaiting()):
@@ -49,6 +66,7 @@ class MuseBox():
 						self.music_controller.next_song()
 					elif (parse_result == 'x'):
 						self.led_controller.blink_processing_light()
+						self.toggle_power()
 					elif (parse_result == 'v'):
 						self.led_controller.blink_processing_light()
 						self.music_controller.clear_queue()
