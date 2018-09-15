@@ -4,8 +4,8 @@ class MusicQueue():
 	
 	def __init__(self):
 		self.home_dir = os.path.expanduser("~")
-		#self.music_dirs = [self.home_dir + "/CranberryMusic/mp3s/"]
-		self.music_dirs = [self.home_dir + "/test_music/"]
+		self.music_dirs = [self.home_dir + "/CranberryMusic/mp3s/"]
+		# self.music_dirs = [self.home_dir + "/test_music/"]
 		self.played_songs = []
 		self.queued_songs = []
 		self.number_songs_in_dir = self.calculate_number_songs()
@@ -39,8 +39,4 @@ class MusicQueue():
 					break
 		print("Songs returned: {0}".format(song_files_no_path_prefix))
 		return song_files
-		
-
-	def finish_song(self, song):
-		self.already_played_songs.append(song)
 		
