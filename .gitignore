@@ -3,3 +3,5 @@ PiControllers/nohup.out
 ArduinoControllers/nohup.out
 nohup.out
 PiControllers/__pycache__
+PiControllers/test_mp3_files/
+PiControllers/*.bak
