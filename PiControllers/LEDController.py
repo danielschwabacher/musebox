@@ -6,9 +6,9 @@ import time
 class LEDController():
 	def __init__(self):
 		GPIO.setwarnings(False)
-		GPIO.setmode(GPIO.BOARD)
-		self.PROCESS_PIN = 11
-		self.ERROR_PIN = 13
+		GPIO.setmode(GPIO.BCM)
+		self.PROCESS_PIN = 21
+		self.ERROR_PIN = 19
 		GPIO.setup(self.PROCESS_PIN, GPIO.OUT, initial=GPIO.LOW)
 		GPIO.setup(self.ERROR_PIN, GPIO.OUT, initial=GPIO.LOW)
 	def blink_processing_light(self):
