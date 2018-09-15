@@ -5,6 +5,8 @@ from MusicController import MusicController
 from SignalParser import SignalParser
 from IRDecoder import IRDecoder
 from LEDController import LEDController
+import pygame
+import random
 
 ser=serial.Serial("/dev/ttyACM0", 28800, timeout=0.05);
 time.sleep(1)
@@ -13,8 +15,13 @@ VERSION = "0.0.1"
 
 print("Running MuseBox, version: " + VERSION + "...");
 
+
+NEXT_SONG = pygame.USEREVENT + 1
+
+
 class MuseBox():
 	def __init__(self):
+		pygame.init()
 		self.power = True
 		self.decoder = IRDecoder()
 		self.parser = SignalParser(ser)
@@ -47,7 +54,11 @@ class MuseBox():
 						self.music_controller.clear_queue()
 				else:
 					self.led_controller.blink_error_light()
-			time.sleep(2)
+			for event in pygame.event.get():
+				if event.type == NEXT_SONG:
+					self.music_controller.next_song()
+					# pygame.mixer.music.play()
+				time.sleep(1)
 				
 box1 = MuseBox()
 box1.process_loop()
