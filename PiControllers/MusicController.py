@@ -2,6 +2,7 @@ import pygame
 from MusicQueue import MusicQueue
 import random
 import time
+from LEDController import LEDController
 
 NEXT_SONG = pygame.USEREVENT + 1
 class MusicController():
@@ -13,10 +14,11 @@ class MusicController():
 		self.songs_to_play = []
 		self.queue_pos = 0
 		self.max_song_queue_pos = 0
+		self.led_toggler = LEDController()
 		
-	def reset(self):
+	def initialize(self):
 		pygame.mixer.init()
-		print("Reseting MuseBox...")
+		print("Initializing MuseBox...")
 		self.mixer_context.stop()
 		self.is_playing = False
 		self.is_loaded = False
@@ -34,13 +36,13 @@ class MusicController():
 			self.mixer_context.play()
 			self.mixer_context.set_endevent(NEXT_SONG)
 			self.is_loaded = True
-			self.is_playing = True			
+			self.is_playing = True
 		elif (self.is_loaded):
 			# Music is already loaded, assume in progress and unpause
 			print("Resuming music...")
 			self.mixer_context.unpause()
 			self.is_playing = True
-		# self.queue_pos += 1
+		self.led_toggler.playing()
 		return
     
 	def pause_music(self):
@@ -48,6 +50,7 @@ class MusicController():
 			print("Pausing music...")
 			self.mixer_context.pause()
 			self.is_playing = False
+			self.led_toggler.paused()
 		return
 
 	def toggle(self):
@@ -63,6 +66,7 @@ class MusicController():
 		self.is_loaded = True
 		self.mixer_context.play()
 		self.is_playing = True
+		self.led_toggler.playing()
 		return
 	
 	def next_song(self):
@@ -91,3 +95,17 @@ class MusicController():
 	def show_song(self):
 		print("Playing song: {0}".format(self.songs_to_play[self.queue_pos]))
     
+	def reset(self):
+		'''
+			Resets everything related to this object. Turns off all 
+			of the Raspberry Pi lights. Also uninitializes 
+			the pygame mixer. Before using MuseBox again, initialize 
+			must be called on the MusicController object.
+		'''
+		self.mixer_context.stop()
+		self.is_loaded = False
+		self.is_playing = True
+		self.queue_pos = 0
+		self.led_toggler.turn_off_all_lights()
+		pygame.mixer.quit()
+		return
