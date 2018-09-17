@@ -15,6 +15,7 @@ class MusicController():
 		self.queue_pos = 0
 		self.max_song_queue_pos = 0
 		self.led_toggler = LEDController()
+		self.volume_context = 0.5
 		
 	def initialize(self):
 		pygame.mixer.init()
@@ -28,10 +29,11 @@ class MusicController():
 		if (not self.is_loaded):
 			# Load music and play
 			print("Loading music...")
-			self.songs_to_play = self.queue.get_songs(limit=5) 		
+			self.songs_to_play = self.queue.get_songs(limit=50) 		
 			self.max_song_queue_pos = len(self.songs_to_play)
 			selected_song = self.songs_to_play[self.queue_pos]
 			self.mixer_context.load(selected_song)
+			self.mixer_context.set_volume(self.volume_context)
 			print("Playing song: {0}".format(selected_song))
 			self.mixer_context.play()
 			self.mixer_context.set_endevent(NEXT_SONG)
@@ -91,16 +93,78 @@ class MusicController():
 			self.play_music()
 		return
 		
+	def rewind_current_song(self):
+		'''
+			Restarts the currently playing song.
+		'''
+		if (self.is_playing):
+			print("Restarting song")
+			self.mixer_context.rewind()
+		else:
+			print("Nothing to rewind")
+		return
+		
+	def previous_song(self):
+		'''
+			Play the song that played before the current song, if the queue
+			supports this action. 
+			
+			Caveats:
+		'''
+		if (self.is_loaded):
+			print("Playing previous song...")
+			if (self.queue_pos >= 1):
+				self.is_loaded = False
+				self.is_playing = False
+				self.queue_pos -= 1
+				self.show_song()
+				self.mixer_context.load(self.songs_to_play[self.queue_pos])
+				self.is_loaded = True
+				self.mixer_context.play()
+				self.is_playing = True
+				self.led_toggler.playing()
+			else:
+				print("No previous song in queue.")
+		else:
+			print("no songs loaded.")
+		return
+		
 		
 	def show_song(self):
 		print("Playing song: {0}".format(self.songs_to_play[self.queue_pos]))
+		
+		
+	def volume_up(self):
+		current_volume = self.mixer_context.get_volume()
+		new_volume = 0
+		if (current_volume + 0.1 < 1.0):
+			new_volume = current_volume + 0.1
+		else:
+			new_volume = 1.0
+		print("new volume after up is: {0}".format(new_volume))
+		self.volume_context = new_volume
+		self.mixer_context.set_volume(self.volume_context)
     
+	def volume_down(self):
+		current_volume = self.mixer_context.get_volume()
+		new_volume = 0
+		if (current_volume - 0.1 > 0.0):
+			new_volume = current_volume - 0.1
+		else:
+			new_volume = 0
+		print("new volume after down is: {0}".format(new_volume))
+		self.volume_context = new_volume
+		self.mixer_context.set_volume(self.volume_context)
+
 	def reset(self):
 		'''
 			Resets everything related to this object. Turns off all 
 			of the Raspberry Pi lights. Also uninitializes 
 			the pygame mixer. Before using MuseBox again, initialize 
 			must be called on the MusicController object.
+			
+			Does NOT destory the actual MusicController object. 
+			This is because we need to preserve the volume setting.
 		'''
 		self.mixer_context.stop()
 		self.is_loaded = False
