@@ -7,7 +7,7 @@ from IRDecoder import IRDecoder
 from LEDController import LEDController
 import pygame
 import random
-
+import os
 ser=serial.Serial("/dev/ttyACM0", 28800, timeout=0.05);
 time.sleep(1)
 ser.baudrate=28800;
@@ -18,6 +18,8 @@ print("Running MuseBox, version: " + VERSION + "...");
 
 NEXT_SONG = pygame.USEREVENT + 1
 
+# We need this in order to use in a headless (no monitor) environment
+os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 class MuseBox():
 	def __init__(self):
@@ -67,16 +69,30 @@ class MuseBox():
 					elif (parse_result == 'x'):
 						self.led_controller.blink_processing_light()
 						self.toggle_power()
-					elif (parse_result == 'v'):
+					elif (parse_result == 'u'):
+						# volume up
 						self.led_controller.blink_processing_light()
-						self.music_controller.clear_queue()
+						self.music_controller.volume_up()
+						pass
+					elif (parse_result == 'd'):
+						# volume down
+						self.led_controller.blink_processing_light()
+						self.music_controller.volume_down()
+						pass
+					elif (parse_result == 'r'):
+						# rewind/back button
+						self.led_controller.blink_processing_light()
+						self.music_controller.rewind_current_song()
+					elif (parse_result == 'b'):
+						self.led_controller.blink_processing_light()
+						self.music_controller.previous_song()
 				else:
+					# Invalid code, show error
 					self.led_controller.blink_error_light()
 			for event in pygame.event.get():
 				if event.type == NEXT_SONG:
 					self.music_controller.next_song()
 					# pygame.mixer.music.play()
-				time.sleep(1)
 				
 box1 = MuseBox()
 box1.process_loop()
