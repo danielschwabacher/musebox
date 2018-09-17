@@ -1,13 +1,10 @@
 class SignalParser():
 	'''
-		SignalParser objects handle writing Serial data
-		back to Arduino.
-		Primarly, the write back data is used to
-		update LED states.
+		SignalParser objects handle translating IR codes.
 	'''
 	def __init__(self, serial_obj):
 		self.serial = serial_obj
-		self.valid_codes = [b'fd', b'3d', b'5d', b'4f']
+		self.valid_codes = [b'fd', b'3d', b'5d', b'4f', b'9d', b'57', b'dd', b'1f']
 		
 	def is_valid(self, sig_code):
 		if (sig_code in self.valid_codes):
@@ -19,6 +16,12 @@ class SignalParser():
 		'''
 			Figures out what to do with the raw byte 
 			values
+			
+			If a valid code is recieved, a single character 
+			is returned which represents the action to perform. 
+			
+			This is essentially a lookup table which maps:
+			IR bytes -> Action characters
 		'''
 		if (signal_code == b'fd'):
 			'''
@@ -54,7 +57,40 @@ class SignalParser():
 			'''
 				Represnt the ST/REPT button on
 				the IR remote
-				Resets the music queue
+				Resets the music queue.
+				NOT USED
 			'''
 			rv = 'v'
 			return rv
+		
+		if (signal_code == b'9d'):
+			'''
+				Represents the volume up 
+				button on IR remote
+			'''
+			rv = 'u'
+			return rv
+			
+		if (signal_code == b'57'):
+			'''
+				Represents the volume down button on 
+				the IR remote
+			'''
+			rv = 'd'
+			return rv
+			
+		if (signal_code == b'dd'):
+			'''
+			Represents the back/rewind button on
+			the IR remote
+			'''
+			rv = 'r'
+			return rv
+			
+		if (signal_code == b'1f'):
+			'''
+				Represents the down button on the IR remote
+				Used to play previous song in queue.
+			'''
+			rv = 'b'
+			return rv 
