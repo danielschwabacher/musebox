@@ -29,7 +29,7 @@ class MusicController():
 		if (not self.is_loaded):
 			# Load music and play
 			print("Loading music...")
-			self.songs_to_play = self.queue.get_songs(limit=50) 		
+			self.songs_to_play = self.queue.get_songs(limit=100) 		
 			self.max_song_queue_pos = len(self.songs_to_play)
 			selected_song = self.songs_to_play[self.queue_pos]
 			self.mixer_context.load(selected_song)
