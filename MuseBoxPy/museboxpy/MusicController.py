@@ -2,19 +2,19 @@ import pygame
 from MusicQueue import MusicQueue
 
 class MusicController():
-	def __init__(self):
-		self.is_loaded = False
+    def __init__(self):
+        self.is_loaded = False
         self.is_playing = False
-		self.queue = MusicQueue()
-		self.mixer_context = pygame.mixer.music
-		pygame.mixer.init()
-		
-	def reset(self):
-		print("Reseting Music Controller")
-		self.mixer_context.stop()
-		self.is_playing = False
-		self.has_music_loaded = False
-		self.queue.reset_songs()
+        self.queue = MusicQueue()
+        self.mixer_context = pygame.mixer.music
+        pygame.mixer.init()
+        
+    def reset(self):
+        print("Reseting Music Controller")
+        self.mixer_context.stop()
+        self.is_playing = False
+        self.has_music_loaded = False
+        self.queue.reset_songs()
 
     def play_music(self):
         if (not self.is_loaded):
@@ -47,8 +47,8 @@ class MusicController():
             self.pause_music()
         else:
             self.play_music()
-			
-	def next_song(self):
+            
+    def next_song(self):
         '''
             Stupid way of playing a new song.
             Requeues all of the songs and starts playing them again.

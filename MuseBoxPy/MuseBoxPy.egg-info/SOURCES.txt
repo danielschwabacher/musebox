@@ -1,0 +1,16 @@
+setup.cfg
+setup.py
+MuseBoxPy.egg-info/PKG-INFO
+MuseBoxPy.egg-info/SOURCES.txt
+MuseBoxPy.egg-info/dependency_links.txt
+MuseBoxPy.egg-info/entry_points.txt
+MuseBoxPy.egg-info/top_level.txt
+MuseBoxPy.egg-info/zip-safe
+museboxpy/IRDecoder.py
+museboxpy/LEDController.py
+museboxpy/MuseBox.py
+museboxpy/MusicController.py
+museboxpy/MusicQueue.py
+museboxpy/SignalParser.py
+museboxpy/__init__.py
+museboxpy/cmd.py

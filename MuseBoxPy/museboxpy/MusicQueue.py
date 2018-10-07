@@ -1,15 +1,15 @@
 import os
 import random
 class MusicQueue():
-	def __init__(self):
-		self.home_dir = os.path.expanduser("~")
-		self.music_dirs = [self.home_dir + "/CranberryMusic/mp3s/"]
-		self.played_songs = []
+    def __init__(self):
+        self.home_dir = os.path.expanduser("~")
+        self.music_dirs = [self.home_dir + "/CranberryMusic/mp3s/"]
+        self.played_songs = []
         self.queued_songs = []
-		self.number_songs_in_dir = len(os.listdir(self.music_dir))
+        self.number_songs_in_dir = len(os.listdir(self.music_dir))
 
-	def clear_queue(self):
-		self.played_songs = []
+    def clear_queue(self):
+        self.played_songs = []
 
     def get_queued_songs(self):
         return queued_songs
@@ -30,7 +30,7 @@ class MusicQueue():
                 else:
                     break
         return random.shuffle(song_files)
-		
+        
     def get_next_song(self):
         return 
 
